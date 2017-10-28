@@ -11,8 +11,10 @@ int main() {
   unsigned int rand_nums[10], rand_nums_compare[10];  
   
   printf("\nOpening file '/dev/random'... \n");
-  unsigned int rand_fd = open("/dev/random", O_RDONLY);
-  printf("Status: %s\n", strerror(errno));
+  int rand_fd = open("/dev/random", O_RDONLY);
+  if (rand_fd == -1){
+    printf("Status: %s\n", strerror(errno));
+  }
   
   int i;
   printf("\n ===== First Array ===== \n");
@@ -25,7 +27,9 @@ int main() {
   
   printf("\nOpening/creating file 'data' for writing... \n");
   int write_data = open("data", O_CREAT | O_WRONLY, 0644);
-  printf("Status: %s\n", strerror(errno));
+  if (write_data == -1){
+     printf("Status: %s\n", strerror(errno));
+  }
 
   int bytes_written, bytes_read;
 
@@ -35,14 +39,16 @@ int main() {
 
   printf("\nOpening file 'data' for reading... \n");
   int read_data = open("data", O_RDONLY, 0644);
-  printf("Status: %s\n", strerror(errno));
+  if (read_data == -1){
+    printf("Status: %s\n", strerror(errno));
+  }
   
   /* Read from data file to new array */
   bytes_read = read(read_data, rand_nums_compare, sizeof(rand_nums_compare));
   printf("Bytes read to new array: %d\n", bytes_read);
   
   /* Print out new array */
-  printf("\n ===a== Second Array ===== \n");
+  printf("\n ===== Second Array ===== \n");
   for(i=0; i<10; i++)
     printf("random %d: %u\n", i, rand_nums_compare[i]);
 
